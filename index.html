@@ -210,7 +210,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-02-10 06:40:31 / 修改时间：20:13:17" itemprop="dateCreated datePublished" datetime="2020-02-10T06:40:31+08:00">2020-02-10</time>
+              <time title="创建时间：2020-02-10 06:40:31 / 修改时间：20:18:31" itemprop="dateCreated datePublished" datetime="2020-02-10T06:40:31+08:00">2020-02-10</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -243,16 +243,18 @@
       
           <p>在nginx配置中关于工作用户的权限设置是一个常见的问题，如果配置出问题就可能出现“403 forbidden”。现在的一个案例是希望不改动<code>nginx.conf</code>的<code>user  nginx</code>;设置一个虚拟server的创始用户是可以登录的。</p>
 <p>开始的设置是先创建一个nginx组的user：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">useradd -g nginx test1</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">useradd -g nginx test1</span><br></pre></td></tr></table></figure>
 <p>然后在/home/test1目录创建一个server目录：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir ~/www</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir ~/www</span><br></pre></td></tr></table></figure>
 <p>然后把相关的文件拷贝到该目录。当时认为这个目录的文件与nginx是同一个组，应该可以有权限。但是配置好server的配置文件后，重启服务后出现的是“403 forbidden”。</p>
-<p>然后开放server目录下的所有权限：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo chmod 777 -R ~/www</span><br></pre></td></tr></table></figure>
-<p>但是还是不行。这个时候想起以前遇到的问题；也是一个在/home目录下的权限问题，当时不仅需要更改工作目录的权限，还需要更改/home目录的权限。于是考虑把虚拟server目录不放到/home下，于是做了如下的测试</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir /opt/test1</span><br><span class="line">sudo chown test1:nginx /opt/test1</span><br><span class="line">mkdir /opt/test1/www</span><br><span class="line">chmod 655 -R ~/www</span><br><span class="line">cp ~/www/* -Rf /opt/test1/www/</span><br></pre></td></tr></table></figure>
-<p>然后将虚拟server的配置文件中的工作目录更改到/opt/test1/www。重启服务之后网页可以正常打开。</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/02/09/nginx%E6%9D%83%E9%99%90%E8%AE%BE%E7%BD%AE/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
