@@ -45,19 +45,20 @@
   };
 </script>
 
-  <meta name="description" content="不积跬步，无以至千里；不积小流，无以成江海。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="学而思之">
-<meta property="og:url" content="http://www.kuai1.com/tags/event/index.html">
+  <meta name="description" content="在nginx配置中关于工作用户的权限设置是一个常见的问题，如果配置出问题就可能出现“403 forbidden”。现在的一个案例是希望不改动nginx.conf的user  nginx;设置一个虚拟server的创始用户是可以登录的。 开始的设置是先创建一个nginx组的user： 1useradd -g nginx test1 然后在&#x2F;home&#x2F;test1目录创建一个server目录： 1mkd">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nginx权限设置">
+<meta property="og:url" content="http://www.kuai1.com/2020/02/09/nginx%E6%9D%83%E9%99%90%E8%AE%BE%E7%BD%AE/index.html">
 <meta property="og:site_name" content="学而思之">
-<meta property="og:description" content="不积跬步，无以至千里；不积小流，无以成江海。">
+<meta property="og:description" content="在nginx配置中关于工作用户的权限设置是一个常见的问题，如果配置出问题就可能出现“403 forbidden”。现在的一个案例是希望不改动nginx.conf的user  nginx;设置一个虚拟server的创始用户是可以登录的。 开始的设置是先创建一个nginx组的user： 1useradd -g nginx test1 然后在&#x2F;home&#x2F;test1目录创建一个server目录： 1mkd">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-02-09T22:40:31.000Z">
+<meta property="article:modified_time" content="2020-02-10T12:13:17.045Z">
 <meta property="article:author" content="Jonathan">
-<meta property="article:tag" content="Javascript">
-<meta property="article:tag" content="nodejs">
+<meta property="article:tag" content="nginx">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://www.kuai1.com/tags/event/">
+<link rel="canonical" href="http://www.kuai1.com/2020/02/09/nginx%E6%9D%83%E9%99%90%E8%AE%BE%E7%BD%AE/">
 
 
 <script id="page-configurations">
@@ -65,13 +66,13 @@
   CONFIG.page = {
     sidebar: "",
     isHome: false,
-    isPost: false,
+    isPost: true,
     isPage: false,
     isArchive: false
   };
 </script>
 
-  <title>标签: event | 学而思之</title>
+  <title>nginx权限设置 | 学而思之</title>
   
 
 
@@ -180,50 +181,108 @@
           <div class="content">
             
 
+  <div class="posts-expand">
+      
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <h1 class="collection-header">event
-          <small>标签</small>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.kuai1.com/2020/02/09/nginx%E6%9D%83%E9%99%90%E8%AE%BE%E7%BD%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jonathan">
+      <meta itemprop="description" content="不积跬步，无以至千里；不积小流，无以成江海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="学而思之">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          nginx权限设置
         </h1>
-      </div>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-02-10 06:40:31 / 修改时间：20:13:17" itemprop="dateCreated datePublished" datetime="2020-02-10T06:40:31+08:00">2020-02-10</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CentOS/" itemprop="url" rel="index">
+                    <span itemprop="name">CentOS</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CentOS/nginx/" itemprop="url" rel="index">
+                    <span itemprop="name">nginx</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <h1 class="collection-header">2020</h1>
+        <p>在nginx配置中关于工作用户的权限设置是一个常见的问题，如果配置出问题就可能出现“403 forbidden”。现在的一个案例是希望不改动<code>nginx.conf</code>的<code>user  nginx</code>;设置一个虚拟server的创始用户是可以登录的。</p>
+<p>开始的设置是先创建一个nginx组的user：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">useradd -g nginx test1</span><br></pre></td></tr></table></figure>
+<p>然后在/home/test1目录创建一个server目录：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir ~/www</span><br></pre></td></tr></table></figure>
+<p>然后把相关的文件拷贝到该目录。当时认为这个目录的文件与nginx是同一个组，应该可以有权限。但是配置好server的配置文件后，重启服务后出现的是“403 forbidden”。</p>
+<p>然后开放server目录下的所有权限：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo chmod 777 -R ~/www</span><br></pre></td></tr></table></figure>
+<p>但是还是不行。这个时候想起以前遇到的问题；也是一个在/home目录下的权限问题，当时不仅需要更改工作目录的权限，还需要更改/home目录的权限。于是考虑把虚拟server目录不放到/home下，于是做了如下的测试</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir /opt/test1</span><br><span class="line">sudo chown test1:nginx /opt/test1</span><br><span class="line">mkdir /opt/test1/www</span><br><span class="line">chmod 655 -R ~/www</span><br><span class="line">cp ~/www/* -Rf /opt/test1/www/</span><br></pre></td></tr></table></figure>
+<p>然后将虚拟server的配置文件中的工作目录更改到/opt/test1/www。重启服务之后网页可以正常打开。</p>
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+    
+    
+    
 
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-01-02T07:37:41+08:00"
-              content="2020-01-02">
-          01-02
-        </time>
-      </div>
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/nginx/" rel="tag"># nginx</a>
+          </div>
 
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2020/01/01/JavaScript%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6%E4%B9%8Bevent-loop/" itemprop="url">
-            <span itemprop="name">JavaScript执行机制之event loop</span>
-          </a>
-      </h2>
+        
 
-    </header>
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/01/01/JavaScript%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6%E4%B9%8Bevent-loop/" rel="prev" title="JavaScript执行机制之event loop">
+      <i class="fa fa-chevron-left"></i> JavaScript执行机制之event loop
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
   </article>
+  
+  
+  
 
-    </div>
   </div>
-  
-  
-  
-
-  
-
 
 
           </div>

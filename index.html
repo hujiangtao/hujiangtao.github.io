@@ -185,6 +185,92 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.kuai1.com/2020/02/09/nginx%E6%9D%83%E9%99%90%E8%AE%BE%E7%BD%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jonathan">
+      <meta itemprop="description" content="不积跬步，无以至千里；不积小流，无以成江海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="学而思之">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/02/09/nginx%E6%9D%83%E9%99%90%E8%AE%BE%E7%BD%AE/" class="post-title-link" itemprop="url">nginx权限设置</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-02-10 06:40:31 / 修改时间：20:13:17" itemprop="dateCreated datePublished" datetime="2020-02-10T06:40:31+08:00">2020-02-10</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CentOS/" itemprop="url" rel="index">
+                    <span itemprop="name">CentOS</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CentOS/nginx/" itemprop="url" rel="index">
+                    <span itemprop="name">nginx</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在nginx配置中关于工作用户的权限设置是一个常见的问题，如果配置出问题就可能出现“403 forbidden”。现在的一个案例是希望不改动<code>nginx.conf</code>的<code>user  nginx</code>;设置一个虚拟server的创始用户是可以登录的。</p>
+<p>开始的设置是先创建一个nginx组的user：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">useradd -g nginx test1</span><br></pre></td></tr></table></figure>
+<p>然后在/home/test1目录创建一个server目录：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir ~/www</span><br></pre></td></tr></table></figure>
+<p>然后把相关的文件拷贝到该目录。当时认为这个目录的文件与nginx是同一个组，应该可以有权限。但是配置好server的配置文件后，重启服务后出现的是“403 forbidden”。</p>
+<p>然后开放server目录下的所有权限：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo chmod 777 -R ~/www</span><br></pre></td></tr></table></figure>
+<p>但是还是不行。这个时候想起以前遇到的问题；也是一个在/home目录下的权限问题，当时不仅需要更改工作目录的权限，还需要更改/home目录的权限。于是考虑把虚拟server目录不放到/home下，于是做了如下的测试</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir /opt/test1</span><br><span class="line">sudo chown test1:nginx /opt/test1</span><br><span class="line">mkdir /opt/test1/www</span><br><span class="line">chmod 655 -R ~/www</span><br><span class="line">cp ~/www/* -Rf /opt/test1/www/</span><br></pre></td></tr></table></figure>
+<p>然后将虚拟server的配置文件中的工作目录更改到/opt/test1/www。重启服务之后网页可以正常打开。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://www.kuai1.com/2020/01/01/JavaScript%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6%E4%B9%8Bevent-loop/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -954,92 +1040,12 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://www.kuai1.com/2019/12/29/%E7%94%A8Hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-%E5%89%8D%E8%A8%80/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Jonathan">
-      <meta itemprop="description" content="不积跬步，无以至千里；不积小流，无以成江海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="学而思之">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/12/29/%E7%94%A8Hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-%E5%89%8D%E8%A8%80/" class="post-title-link" itemprop="url">用Hexo搭建个人博客-前言</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-12-30 07:50:57" itemprop="dateCreated datePublished" datetime="2019-12-30T07:50:57+08:00">2019-12-30</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-31 08:58:45" itemprop="dateModified" datetime="2019-12-31T08:58:45+08:00">2019-12-31</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%94%A8Hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" itemprop="url" rel="index">
-                    <span itemprop="name">用Hexo搭建个人博客</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="用Hexo搭建个人博客"><a href="#用Hexo搭建个人博客" class="headerlink" title="用Hexo搭建个人博客"></a>用Hexo搭建个人博客</h2><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>从本质来说Hexo是一个基于Node.js的Web程序框架。运用Hexo脚手架，我们可以通过npm创建并管理一个生成静态页面博客的Web工程。如果从web工程的角度来看Hexo，这样一个编辑博客的客户端未免太重量级了，要知道动态博客系统我们无论在何时何地，只要能打开页面就可以编写管理博客。但是从部署一个博客服务端程序来看；当我们要部署一个动态的博客程序时，我们需要有数据库来存储我们的博客的相关数据，我们需要或是Apache、或是Tomcat、或是Node.js等等这样的web程序容器来运行相关的web程序；当然你还需要一台联网的服务器机器，否则我们前面说的也是空中楼阁了。所以部署一个动态的个人的博客系统可不是一件轻松的事情。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/12/29/%E7%94%A8Hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-%E5%89%8D%E8%A8%80/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+  </nav>
 
 
 
@@ -1082,20 +1088,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-count">11</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
