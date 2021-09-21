@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://www.kuai1.com').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="摘录 package.json 的 dependencies 里有趣现象  带@加前缀的 如：&quot;@babel&#x2F;preset-env&quot;: &quot;^7.3.4&quot; 这种用法主要想将多个 package 分组归类，但不能直接xxx&#x2F;yyy，前面必须添加@。 注意：这带前缀的包，在发布时要带 publish 参数, npm publish --access publish">
+<meta property="og:type" content="article">
+<meta property="og:title" content="npm资料摘录-package.json">
+<meta property="og:url" content="http://www.kuai1.com/2019/12/31/npm%E8%B5%84%E6%96%99%E6%91%98%E5%BD%95-package-json/index.html">
+<meta property="og:site_name" content="学而思之">
+<meta property="og:description" content="摘录 package.json 的 dependencies 里有趣现象  带@加前缀的 如：&quot;@babel&#x2F;preset-env&quot;: &quot;^7.3.4&quot; 这种用法主要想将多个 package 分组归类，但不能直接xxx&#x2F;yyy，前面必须添加@。 注意：这带前缀的包，在发布时要带 publish 参数, npm publish --access publish">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-12-30T18:31:36.000Z">
+<meta property="article:modified_time" content="2021-09-21T01:19:04.422Z">
+<meta property="article:author" content="Jonathan">
+<meta property="article:tag" content="npm">
+<meta property="article:tag" content="package.json">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://www.kuai1.com/2019/12/31/npm%E8%B5%84%E6%96%99%E6%91%98%E5%BD%95-package-json/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>npm资料摘录-package.json | 学而思之</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">学而思之</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.kuai1.com/2019/12/31/npm%E8%B5%84%E6%96%99%E6%91%98%E5%BD%95-package-json/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jonathan">
+      <meta itemprop="description" content="不积跬步，无以至千里；不积小流，无以成江海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="学而思之">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          npm资料摘录-package.json
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-12-31 02:31:36" itemprop="dateCreated datePublished" datetime="2019-12-31T02:31:36+08:00">2019-12-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-09-21 09:19:04" itemprop="dateModified" datetime="2021-09-21T09:19:04+08:00">2021-09-21</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/npm/" itemprop="url" rel="index">
+                    <span itemprop="name">npm</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/npm/%E6%91%98%E5%BD%95/" itemprop="url" rel="index">
+                    <span itemprop="name">摘录</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>摘录 <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/33115db91c40">package.json 的 dependencies 里有趣现象</a></p>
+<ol>
+<li><p>带@加前缀的<br> 如：<code>&quot;@babel/preset-env&quot;: &quot;^7.3.4&quot;</code><br> 这种用法主要想将多个 package 分组归类，但不能直接<code>xxx/yyy</code>，前面必须添加<code>@</code>。<br> 注意：这带前缀的包，在发布时要带 publish 参数, <code>npm publish --access publish</code></p>
+</li>
+<li><p>带^号<br> 如：<code>&quot;moment&quot;: &quot;^2.24.0&quot;</code><br> 就上面这个而言，<code>^</code>号表示 <code>&gt;=2.24.0 &lt; 3.0.0</code></p>
+</li>
+<li><p>纯版本号<br> 如：<code>&quot;react&quot;: &quot;16.4.1&quot;</code><br> 一般固定版本号，是担心安装了比当前版本高的版本，从而引起不兼容。不过现在都有了 arn.lock 或 package-lock.json 来锁版本，就没这类问题了。</p>
+ <span id="more"></span></li>
+<li><p>带包名的版本号<br> 如：<code>&quot;react-native-webp-support&quot;: &quot;TGPSKI/react-native-webp-support&quot;</code><br> 详情见：<a target="_blank" rel="noopener" href="https://github.com/TGPSKI/react-native-webp-support#ios">https://github.com/TGPSKI/react-native-webp-support#ios</a></p>
+</li>
+<li><p>直接安装代码仓库里的代码<br> 如：<code>&quot;repository1&quot;: &quot;git+https://github.com/myusername/repository1.git&quot;</code><br> 这种形式也还有多种玩法，比如：地址后面跟不同的 branchName、tagName、hashCode（某一次提交的代码） 等。</p>
+</li>
+<li><p>引用本地文件<br> 如：<code>&quot;react-native-video&quot;: &quot;file:../..&quot;</code><br> 详情见：<a target="_blank" rel="noopener" href="https://github.com/react-native-community/react-native-video/blob/master/examples/basic/package.json">https://github.com/react-native-community/react-native-video/blob/master/examples/basic/package.json</a></p>
+<p> 一般是 package 作者在写 <code>examples</code> 时，引用 package 项目根目录下的 index.js 文件。</p>
+</li>
+<li><p>安装至代码目录<br> 如：<code>&quot;react-native-device-info&quot;: &quot;file:./src/node_modules/react-native-device-info&quot;</code><br> 安装后，会将 <code>react-native-device-info</code> 包安装到本地目录（src 下），方便自己管理（但下次安装会覆盖，除非将修改过的文件用 git 管理起来），<strong>不推荐</strong>。</p>
+</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/npm/" rel="tag"># npm</a>
+              <a href="/tags/package-json/" rel="tag"># package.json</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/30/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F/" rel="prev" title="个人博客的使用方式">
+      <i class="fa fa-chevron-left"></i> 个人博客的使用方式
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/31/npm%E6%91%98%E5%BD%95/" rel="next" title="npm摘录">
+      npm摘录 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Jonathan</p>
+  <div class="site-description" itemprop="description">不积跬步，无以至千里；不积小流，无以成江海。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">粤ICP备14094270号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jonathan</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
