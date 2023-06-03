@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"www.yushan.shop","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"www.yushan.shop","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="前面说了，hexo从根本上来说是一个web程序框架；而hexo-cli脚手架提供各种快捷指令，方便我们开发配置我们需要开发的web程序。 安装脚手架1$ npm install hexo-cli -g 我们先通过npm全局安装hexo-cli这个给脚手架,然后就可以用hexo指令来执行一些快捷指令进行创建工程、生成页面、部署博客等等一些功能。现在我们就可以先生成一个blog工程。 123$ hex">
@@ -226,7 +226,7 @@
 <span id="more"></span>
 <h3 id="将工程用git管理起来"><a href="#将工程用git管理起来" class="headerlink" title="将工程用git管理起来"></a>将工程用git管理起来</h3><p>然后在github创建一个blog配置管理库，把这个工程关联并管理起来。  </p>
 <ul>
-<li>先进入到个人的github页面，点击Repositories右侧的New按钮，然后按照默认创建一个空的blog库：<a href="mailto:&#103;&#105;&#116;&#x40;&#x67;&#x69;&#x74;&#x68;&#117;&#x62;&#x2e;&#x63;&#111;&#x6d;">&#103;&#105;&#116;&#x40;&#x67;&#x69;&#x74;&#x68;&#117;&#x62;&#x2e;&#x63;&#111;&#x6d;</a>:youname&#x2F;yourblog.git</li>
+<li>先进入到个人的github页面，点击Repositories右侧的New按钮，然后按照默认创建一个空的blog库：<a href="mailto:&#x67;&#x69;&#116;&#x40;&#x67;&#105;&#116;&#104;&#117;&#x62;&#46;&#x63;&#x6f;&#x6d;">&#x67;&#x69;&#116;&#x40;&#x67;&#105;&#116;&#104;&#117;&#x62;&#46;&#x63;&#x6f;&#x6d;</a>:youname&#x2F;yourblog.git</li>
 <li>然后返回到本地机器，在刚刚建立的blog目录下初始化git库  <figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$ </span>git init</span><br><span class="line"><span class="variable">$ </span>git add .                     <span class="comment">#添加当前文件夹所有文件到暂存区</span></span><br><span class="line"><span class="variable">$ </span>git commit -m <span class="string">&#x27;init blog&#x27;</span>     <span class="comment">#提交文件到本地库</span></span><br></pre></td></tr></table></figure></li>
 <li>将本地库与远程库关联起来  <figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$ </span>git remote add origin git<span class="variable">@github</span>.<span class="symbol">com:</span>youname/yourblog.git <span class="comment">#将本地库与远程库关联起来</span></span><br><span class="line"><span class="variable">$ </span>git push -u origin master     <span class="comment">#将本地库push到远程库中</span></span><br></pre></td></tr></table></figure>
 这样就把blog工程用git管理起来了，并且可以随时把工程push github远端库里；这样可以随时在任何机器上获取你的工程文件生成博客了。</li>
@@ -417,7 +417,7 @@
 <script src="/js/motion.js"></script>
 
 
-<script src="/js/schemes/pisces.js"></script>
+<script src="/js/schemes/muse.js"></script>
 
 
 <script src="/js/next-boot.js"></script>
