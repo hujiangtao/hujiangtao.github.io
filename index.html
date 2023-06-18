@@ -163,6 +163,90 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.yushan.shop/2023/06/18/%E5%85%B3%E4%BA%8Eacme-sh%E7%9A%84%E6%91%98%E5%BD%952/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jonathan">
+      <meta itemprop="description" content="不积跬步，无以至千里；不积小流，无以成江海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="学而思之">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/06/18/%E5%85%B3%E4%BA%8Eacme-sh%E7%9A%84%E6%91%98%E5%BD%952/" class="post-title-link" itemprop="url">关于acme.sh的摘录2</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-06-18 08:52:21 / 修改时间：09:19:41" itemprop="dateCreated datePublished" datetime="2023-06-18T08:52:21+08:00">2023-06-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%BB%BA%E7%AB%99/" itemprop="url" rel="index"><span itemprop="name">建站</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%BB%BA%E7%AB%99/%E6%91%98%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">摘录</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="4-安装证书"><a href="#4-安装证书" class="headerlink" title="4. 安装证书"></a>4. 安装证书</h2><p>前面证书生成以后, 接下来需要把证书 copy 到真正需要用它的地方.</p>
+<p>默认生成的证书都放在安装目录下: ~&#x2F;.acme.sh&#x2F;, <code>请不要直接使用此目录下的文件</code>。 不要直接让 nginx&#x2F;apache 的配置文件使用这下面的文件，这里面的文件都是内部使用, 而且目录结构可能会变化。</p>
+<p>正确的使用方法是使用<code>--install-cert</code>命令,并指定目标位置, 然后证书文件会被copy到相应的位置。</p>
+<h3 id="4-1-Apache-example"><a href="#4-1-Apache-example" class="headerlink" title="4.1 Apache example"></a>4.1 Apache example</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">acme.sh --install-cert -d example.com \</span><br><span class="line">    --cert-file      /path/to/certfile/in/apache/cert.pem \</span><br><span class="line">    --key-file       /path/to/keyfile/in/apache/key.pem  \</span><br><span class="line">    --fullchain-file /path/to/fullchain/certfile/apache/fullchain.pem \</span><br><span class="line">    --reloadcmd     <span class="string">&quot;service apache2 force-reload&quot;</span>  </span><br></pre></td></tr></table></figure>
+
+<h3 id="4-2-Nginx-example"><a href="#4-2-Nginx-example" class="headerlink" title="4.2 Nginx example"></a>4.2 Nginx example</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">acme.sh --install-cert -d example.com \</span><br><span class="line">    --key-file       /path/to/keyfile/in/nginx/key.pem  \</span><br><span class="line">    --fullchain-file /path/to/fullchain/nginx/cert.pem \</span><br><span class="line">    --reloadcmd     <span class="string">&quot;service nginx force-reload&quot;</span></span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/06/18/%E5%85%B3%E4%BA%8Eacme-sh%E7%9A%84%E6%91%98%E5%BD%952/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://www.yushan.shop/2023/06/06/%E5%85%B3%E4%BA%8Eacme-sh%E7%9A%84%E6%91%98%E5%BD%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -935,87 +1019,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://www.yushan.shop/2019/12/30/%E7%94%A8Hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-%E8%AE%BE%E7%BD%AEGitHub/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Jonathan">
-      <meta itemprop="description" content="不积跬步，无以至千里；不积小流，无以成江海。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="学而思之">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/12/30/%E7%94%A8Hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-%E8%AE%BE%E7%BD%AEGitHub/" class="post-title-link" itemprop="url">用Hexo搭建个人博客-设置GitHub</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-12-30 20:20:30" itemprop="dateCreated datePublished" datetime="2019-12-30T20:20:30+08:00">2019-12-30</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-02-25 10:31:45" itemprop="dateModified" datetime="2023-02-25T10:31:45+08:00">2023-02-25</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%94%A8Hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" itemprop="url" rel="index"><span itemprop="name">用Hexo搭建个人博客</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>静态博客可以说是从GitHub pages开始兴起的。当我们在github上配置静态博客的时候，就需要在github完成相关配置。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/12/30/%E7%94%A8Hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-%E8%AE%BE%E7%BD%AEGitHub/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1085,7 +1088,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-count">12</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

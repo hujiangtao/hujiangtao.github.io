@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.yushan.shop","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="4. 安装证书前面证书生成以后, 接下来需要把证书 copy 到真正需要用它的地方. 默认生成的证书都放在安装目录下: ~&#x2F;.acme.sh&#x2F;, 请不要直接使用此目录下的文件。 不要直接让 nginx&#x2F;apache 的配置文件使用这下面的文件，这里面的文件都是内部使用, 而且目录结构可能会变化。 正确的使用方法是使用--install-cert命令,并指定目标位置,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于acme.sh的摘录2">
+<meta property="og:url" content="http://www.yushan.shop/2023/06/18/%E5%85%B3%E4%BA%8Eacme-sh%E7%9A%84%E6%91%98%E5%BD%952/index.html">
+<meta property="og:site_name" content="学而思之">
+<meta property="og:description" content="4. 安装证书前面证书生成以后, 接下来需要把证书 copy 到真正需要用它的地方. 默认生成的证书都放在安装目录下: ~&#x2F;.acme.sh&#x2F;, 请不要直接使用此目录下的文件。 不要直接让 nginx&#x2F;apache 的配置文件使用这下面的文件，这里面的文件都是内部使用, 而且目录结构可能会变化。 正确的使用方法是使用--install-cert命令,并指定目标位置,">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-06-18T00:52:21.000Z">
+<meta property="article:modified_time" content="2023-06-18T01:19:41.261Z">
+<meta property="article:author" content="Jonathan">
+<meta property="article:tag" content="acme.sh">
+<meta property="article:tag" content="SSL">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://www.yushan.shop/2023/06/18/%E5%85%B3%E4%BA%8Eacme-sh%E7%9A%84%E6%91%98%E5%BD%952/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>关于acme.sh的摘录2 | 学而思之</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">学而思之</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.yushan.shop/2023/06/18/%E5%85%B3%E4%BA%8Eacme-sh%E7%9A%84%E6%91%98%E5%BD%952/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jonathan">
+      <meta itemprop="description" content="不积跬步，无以至千里；不积小流，无以成江海。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="学而思之">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          关于acme.sh的摘录2
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-06-18 08:52:21 / 修改时间：09:19:41" itemprop="dateCreated datePublished" datetime="2023-06-18T08:52:21+08:00">2023-06-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%BB%BA%E7%AB%99/" itemprop="url" rel="index"><span itemprop="name">建站</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%BB%BA%E7%AB%99/%E6%91%98%E5%BD%95/" itemprop="url" rel="index"><span itemprop="name">摘录</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="4-安装证书"><a href="#4-安装证书" class="headerlink" title="4. 安装证书"></a>4. 安装证书</h2><p>前面证书生成以后, 接下来需要把证书 copy 到真正需要用它的地方.</p>
+<p>默认生成的证书都放在安装目录下: ~&#x2F;.acme.sh&#x2F;, <code>请不要直接使用此目录下的文件</code>。 不要直接让 nginx&#x2F;apache 的配置文件使用这下面的文件，这里面的文件都是内部使用, 而且目录结构可能会变化。</p>
+<p>正确的使用方法是使用<code>--install-cert</code>命令,并指定目标位置, 然后证书文件会被copy到相应的位置。</p>
+<h3 id="4-1-Apache-example"><a href="#4-1-Apache-example" class="headerlink" title="4.1 Apache example"></a>4.1 Apache example</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">acme.sh --install-cert -d example.com \</span><br><span class="line">    --cert-file      /path/to/certfile/in/apache/cert.pem \</span><br><span class="line">    --key-file       /path/to/keyfile/in/apache/key.pem  \</span><br><span class="line">    --fullchain-file /path/to/fullchain/certfile/apache/fullchain.pem \</span><br><span class="line">    --reloadcmd     <span class="string">&quot;service apache2 force-reload&quot;</span>  </span><br></pre></td></tr></table></figure>
+
+<h3 id="4-2-Nginx-example"><a href="#4-2-Nginx-example" class="headerlink" title="4.2 Nginx example"></a>4.2 Nginx example</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">acme.sh --install-cert -d example.com \</span><br><span class="line">    --key-file       /path/to/keyfile/in/nginx/key.pem  \</span><br><span class="line">    --fullchain-file /path/to/fullchain/nginx/cert.pem \</span><br><span class="line">    --reloadcmd     <span class="string">&quot;service nginx force-reload&quot;</span></span><br></pre></td></tr></table></figure>
+<span id="more"></span>
+
+<p>注意：这里用的是 service nginx force-reload, 不是 service nginx reload, 据测试, reload 并不会重新加载证书, 所以用的 force-reload。</p>
+<p>Nginx 的配置 ssl_certificate 使用 &#x2F;etc&#x2F;nginx&#x2F;ssl&#x2F;fullchain.cer ，而非 &#x2F;etc&#x2F;nginx&#x2F;ssl&#x2F;<domain>.cer ，否则 SSL Labs 的测试会报 Chain issues Incomplete 错误。</p>
+<p>–install-cert命令可以携带很多参数, 来指定目标文件. 并且可以指定 reloadcmd, 当证书更新以后, reloadcmd会被自动调用,让服务器生效。</p>
+<p>值得注意的是, 这里指定的所有参数都会被自动记录下来, 并在将来证书自动更新以后, 被再次自动调用。</p>
+<h2 id="5-查看已安装证书信息"><a href="#5-查看已安装证书信息" class="headerlink" title="5. 查看已安装证书信息"></a>5. 查看已安装证书信息</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">acme.sh --info -d example.com</span><br><span class="line"><span class="comment"># 会输出如下内容：</span></span><br><span class="line">DOMAIN_CONF=/root/.acme.sh/example.com/example.com.conf</span><br><span class="line">Le_Domain=example.com</span><br><span class="line">Le_Alt=no</span><br><span class="line">Le_Webroot=dns_ali</span><br><span class="line">Le_PreHook=</span><br><span class="line">Le_PostHook=</span><br><span class="line">Le_RenewHook=</span><br><span class="line">Le_API=https://acme-v02.api.letsencrypt.org/directory</span><br><span class="line">Le_Keylength=</span><br><span class="line">Le_OrderFinalize=https://acme-v02.api.letsencrypt.org/acme/finalize/23xxxx150/781xxxx4310</span><br><span class="line">Le_LinkOrder=https://acme-v02.api.letsencrypt.org/acme/order/233xxx150/781xxxx4310</span><br><span class="line">Le_LinkCert=https://acme-v02.api.letsencrypt.org/acme/cert/04cbd28xxxxxx349ecaea8d07</span><br><span class="line">Le_CertCreateTime=1649358725</span><br><span class="line">Le_CertCreateTimeStr=Thu Apr  7 19:12:05 UTC 2022</span><br><span class="line">Le_NextRenewTimeStr=Mon Jun  6 19:12:05 UTC 2022</span><br><span class="line">Le_NextRenewTime=1654456325</span><br><span class="line">Le_RealCertPath=</span><br><span class="line">Le_RealCACertPath=</span><br><span class="line">Le_RealKeyPath=/etc/acme/example.com/privkey.pem</span><br><span class="line">Le_ReloadCmd=service nginx force-reload</span><br><span class="line">Le_RealFullChainPath=/etc/acme/example.com/chain.pem</span><br></pre></td></tr></table></figure>
+
+<h2 id="6-更新证书"><a href="#6-更新证书" class="headerlink" title="6. 更新证书"></a>6. 更新证书</h2><p>目前证书在 60 天以后会自动更新, 你无需任何操作。今后有可能会缩短这个时间, 不过都是自动的, 你不用关心。</p>
+<p>请确保 cronjob 正确安装, 看起来是类似这样的:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">crontab  -l</span><br><span class="line"></span><br><span class="line">56 * * * * <span class="string">&quot;/root/.acme.sh&quot;</span>/acme.sh --cron --home <span class="string">&quot;/root/.acme.sh&quot;</span> &gt; /dev/null</span><br></pre></td></tr></table></figure>
+
+<h2 id="7-更新-acme-sh"><a href="#7-更新-acme-sh" class="headerlink" title="7. 更新 acme.sh"></a>7. 更新 acme.sh</h2><p>目前由于 acme 协议和 letsencrypt CA 都在频繁的更新, 因此 acme.sh 也经常更新以保持同步。</p>
+<p>升级 acme.sh 到最新版 :</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">acme.sh --upgrade</span><br></pre></td></tr></table></figure>
+<p>如果你不想手动升级, 可以开启自动升级:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">acme.sh --upgrade --auto-upgrade</span><br></pre></td></tr></table></figure>
+<p>之后, acme.sh 就会自动保持更新了.</p>
+<p>你也可以随时关闭自动更新:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">acme.sh --upgrade --auto-upgrade  0</span><br></pre></td></tr></table></figure>
+
+<h2 id="8-签发ECC证书"><a href="#8-签发ECC证书" class="headerlink" title="8. 签发ECC证书"></a>8. 签发ECC证书</h2><p>只需设置 keylength带前缀的参数 ec-.</p>
+<p>例如：<br>单域ECC证书</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">acme.sh --issue -w /home/wwwroot/example.com -d example.com --keylength ec-256</span><br></pre></td></tr></table></figure>
+<p>SAN多域ECC证书</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">acme.sh --issue -w /home/wwwroot/example.com -d example.com -d www.example.com --keylength ec-256</span><br></pre></td></tr></table></figure>
+<p>签发ECC证书时keylength的参数如下所示；<br>有效值为：<br>    ec-256（prime256v1，“ECDSA P-256”，这是默认密钥类型）<br>    ec-384（secp384r1，“ECDSA P-384”）<br>    ec-521（secp521r1，“ECDSA P-521”，Let’s Encrypt 尚不支持。）<br>    2048 (RSA2048)<br>    3072 (RSA3072)<br>    4096 (RSA4096)</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/acme-sh/" rel="tag"># acme.sh</a>
+              <a href="/tags/SSL/" rel="tag"># SSL</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/06/06/%E5%85%B3%E4%BA%8Eacme-sh%E7%9A%84%E6%91%98%E5%BD%95/" rel="prev" title="关于acme.sh的摘录">
+      <i class="fa fa-chevron-left"></i> 关于acme.sh的摘录
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%AE%89%E8%A3%85%E8%AF%81%E4%B9%A6"><span class="nav-number">1.</span> <span class="nav-text">4. 安装证书</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-Apache-example"><span class="nav-number">1.1.</span> <span class="nav-text">4.1 Apache example</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-Nginx-example"><span class="nav-number">1.2.</span> <span class="nav-text">4.2 Nginx example</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E6%9F%A5%E7%9C%8B%E5%B7%B2%E5%AE%89%E8%A3%85%E8%AF%81%E4%B9%A6%E4%BF%A1%E6%81%AF"><span class="nav-number">2.</span> <span class="nav-text">5. 查看已安装证书信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E6%9B%B4%E6%96%B0%E8%AF%81%E4%B9%A6"><span class="nav-number">3.</span> <span class="nav-text">6. 更新证书</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-%E6%9B%B4%E6%96%B0-acme-sh"><span class="nav-number">4.</span> <span class="nav-text">7. 更新 acme.sh</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-%E7%AD%BE%E5%8F%91ECC%E8%AF%81%E4%B9%A6"><span class="nav-number">5.</span> <span class="nav-text">8. 签发ECC证书</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Jonathan</p>
+  <div class="site-description" itemprop="description">不积跬步，无以至千里；不积小流，无以成江海。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jonathan</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
